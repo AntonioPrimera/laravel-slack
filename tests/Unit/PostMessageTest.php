@@ -76,10 +76,8 @@ class PostMessageTest extends TestCase
 			if ($dumpBody)
 				dump($response->body());
 			
-			$this->assertTrue(strpos($response->body(), 'payload=') === 0);
-			
-			$json = substr($response->body(), strlen('payload='));
-			$data = json_decode($json, true);
+			$this->assertJson($response->body());
+			$data = json_decode($response->body(), true);
 			
 			foreach ($expectedData as $key => $value) {
 				$this->assertArrayHasKey($key, $data, 'Slack request is missing key: ', $key);

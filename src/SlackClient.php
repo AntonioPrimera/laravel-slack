@@ -11,14 +11,17 @@ class SlackClient
 	protected $emoji;
 	protected $username;
 	protected $slackWebhookUrl;
+	protected $silent;				//if true, don't throw exceptions
 	
 	/**
 	 * @throws InvalidSlackConfigurationException
 	 */
-	public function __construct()
+	public function __construct($silent = false)
 	{
 		$this->slackWebhookUrl = config('slack.webhookUrl');
-		if (!$this->slackWebhookUrl)
+		$this->silent = $silent;
+		
+		if (!$this->silent && !$this->slackWebhookUrl)
 			throw new InvalidSlackConfigurationException('No webhook url found in config slack.webhookUrl');
 	}
 	
@@ -57,8 +60,15 @@ class SlackClient
 			'username'   => $this->username,
 		]);
 		
-		Http::withBody('payload=' . json_encode($payload), 'application/x-www-form-urlencoded')
-			->post($this->slackWebhookUrl);
+		return $this->sendRequest($payload);
+	}
+	
+	//--- Protected helpers -------------------------------------------------------------------------------------------
+	
+	protected function sendRequest($payload)
+	{
+		if ($this->slackWebhookUrl)
+			Http::post($this->slackWebhookUrl, $payload);
 		
 		return $this;
 	}

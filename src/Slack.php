@@ -11,61 +11,20 @@ namespace AntonioPrimera\Slack;
  */
 class Slack
 {
-	protected $channel;
-	protected $emoji;
-	protected $username;
-	
-	//public function __construct()
-	//{
-	//}
 	
 	public static function __callStatic($name, $arguments)
 	{
 		return call_user_func([static::makeClient(), $name], ...$arguments);
 	}
 	
-	public static function makeClient(): SlackClient
+	/**
+	 * This client factory creates silent clients by default, so no
+	 * exception is thrown if no webhook url is defined in .env
+	 *
+	 * @throws Exceptions\InvalidSlackConfigurationException
+	 */
+	public static function makeClient($silent = true): SlackClient
 	{
-		return new SlackClient();
+		return new SlackClient($silent);
 	}
-	
-	//public function channel($channel, $directMessage = false)
-	//{
-	//	$this->channel = ($directMessage ? '@' : '#') . $channel;
-	//	return $this;
-	//}
-	//
-	//public function emoji($emoji)
-	//{
-	//	$this->emoji = ':' . trim($emoji, ':') . ':';
-	//	return $this;
-	//}
-	//
-	//public function user($username)
-	//{
-	//	$this->username = $username;
-	//	return $this;
-	//}
-	//
-	//public function post($message)
-	//{
-	//	if (!$message)
-	//		return $this;
-	//
-	//	$url = config('logging.channels.slack.url');
-	//	if (!$url)
-	//		return $this;
-	//
-	//	$payload = array_filter([
-	//		'channel'    => $this->channel ?: config('logging.channels.slack.channel'),
-	//		'text'       => $message,
-	//		'icon_emoji' => $this->emoji,
-	//		'username'   => $this->username,
-	//	]);
-	//
-	//	Http::withBody('payload=' . json_encode($payload), 'application/x-www-form-urlencoded')
-	//		->post($url);//post($url, compact('payload'));
-	//
-	//	return $this;
-	//}
 }

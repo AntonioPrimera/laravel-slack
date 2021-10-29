@@ -28,8 +28,18 @@ You can use one of the static methods on the **AntonioPrimera\Slack\Slack** clas
 instantiate a **AntonioPrimera\Slack\SlackClient** yourself. I recommend the first option and
 this will be exemplified below.
 
-This will post a message to the channel "#my-channel", coming from the user "Antonio" and will
-add an emoji ":happy-face:".
+The most basic usage will send a simple message to the default channel, chosen when you
+defined the Webhook url. For this, you can use the **post** method.
+
+```php
+use AntonioPrimera\Slack\Slack;
+
+Slack::post('This is the most basic usage, and will post a message to Slack');
+```
+
+You can fluently add several options to your message, to determine where it is sent to, the
+sender name, an emoji etc. The example below will post a message to the channel "#my-channel",
+coming from the user "Antonio" and will set the message emoji ":happy-face:".
 
 ```php
 use AntonioPrimera\Slack\Slack;
@@ -51,16 +61,6 @@ Slack::channel('james', true)
 
 Slack::from('Antonio')
     ->directMessage('james', 'Hello James!');
-```
-
-You can skip any of the options for sending the Slack message. You can just send a very basic
-message using the **post** method. The channel will be determined by Slack (the default channel
-you set when creating the Slack Webhook).
-
-```php
-use AntonioPrimera\Slack\Slack;
-
-Slack::post('This is the most basic usage, and will post a message to Slack');
 ```
 
 ## Future development
